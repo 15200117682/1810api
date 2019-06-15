@@ -177,13 +177,12 @@ class TestController extends Controller
 
     //支付宝支付
     public function pay(){
-        $order_data0=[
+        $order_data=[
             "subject"       =>  "开心果",
             "out_trade_no"  =>  "1810-".mt_rand(1000,9999),
             "total_amount"  =>  mt_rand(1,10),
             "product_code"  =>  "QUICK_WAP_WAY"
         ];
-        $order_data=json_encode($order_data0);
         $data=[
             "app_id"        =>  "2016091900549984",
             "method"        =>  "alipay.trade.wap.pay",
@@ -191,32 +190,33 @@ class TestController extends Controller
             "sign_type"     =>  "RSA2",
             "timestamp"     =>  date("Y-m-d h:i:s"),
             "version"       =>  "1.0",
-            "biz_content"   =>  $order_data
+            "biz_content"   => json_encode($order_data,JSON_UNESCAPED_UNICODE),
         ];
-
         ksort($data);//排序
         $str0="";
         foreach ($data as $k=>$v){
             $str0.= $k."=".$v."&";
         }
-        $str=rtrim($str0,"&");//去除最后的&符号
-
-        $url = 'https://openapi.alipaydev.com/gateway.do';//手机端请求的地址
-
+        $str=rtrim($str0,"&");//拼接成带参数的字符串
+        
         $rsa_data=openssl_get_privatekey('file://'.storage_path('soft/rsa_private.pem'));//私钥位置
-        //生成签名
-        openssl_sign($str,$sign,$rsa_data,OPENSSL_ALGO_SHA256);
+        openssl_sign($str,$sign,$rsa_data,OPENSSL_ALGO_SHA256);//生成签名
         $sign = base64_encode($sign);
         $data['sign']=$sign;
+        //echo "<pre>".print_r($data);echo "<pre>";exit;
 
+        //urlcode拼接参数
         $a='?';
         foreach($data as $key=>$val){
-            $a.=$key.'='.urlencode($val).'&'; //用urlencode将字符串以url编码
+            $a.=$key.'='.urlencode($val).'&'; //用urlencode函数将字符串转换成以url编码的
         }
+
+        $url = 'https://openapi.alipaydev.com/gateway.do';//手机端请求的地址
         $trim2 = rtrim($a,'&');
         $url2 = $url.$trim2;
 
-        header('refresh:2;url='.$url2);
+        //get发送数据
+       header('refresh:2;url='.$url2);
 
     }
 
