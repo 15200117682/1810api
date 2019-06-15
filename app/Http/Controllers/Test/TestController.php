@@ -204,13 +204,13 @@ class TestController extends Controller
         $sign = base64_encode($sign);
         $data['sign']=$sign;
 
-
         $a='?';
         foreach($data as $key=>$val){
-            $a.=$key.'='.urlencode($val).'&'; //用urlencode 将字符串以url形式编码
+            $a.=$key.'='.urlencode($val).'&'; //用urlencode将字符串以url编码
         }
         $trim2 = rtrim($a,'&');
         $url2 = $url.$trim2;
+
         header('refresh:2;url='.$url2);
 
     }
