@@ -170,6 +170,11 @@ class TestController extends Controller
         echo $res;
     }
 
+    //去支付
+    public function alipay(){
+        return view("pay.alipay");
+    }
+
     //支付宝支付
     public function pay(){
         $order_data0=[

@@ -25,6 +25,7 @@ Route::get("/test/menu","Test\TestController@menu");//自定义菜单
 Route::get("/test/encryption","Test\TestController@encryption");//测试加密方法
 Route::get("/test/no_enc","Test\TestController@noEncryption");//测试非对称加密方法
 Route::get("/test/signature","Test\TestController@signature");//签名
+Route::get("/test/alipay","Test\TestController@alipay");//测试支付宝支付
 Route::get("/test/pay","Test\TestController@pay");//测试支付宝支付
 
 Route::get("/test/index","Test\TestController@index");//页面
