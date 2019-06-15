@@ -114,7 +114,6 @@ class TestController extends Controller
     //对称加密
     public function encryption(Request $request){
         $string="123456abc";
-        //$data=base64_encode($string);
         $key ="yuanfen";
         $iv="rfdefgvcsxewqjgh";
         $data=openssl_encrypt($string,"AES-128-CBC",$key,OPENSSL_RAW_DATA,$iv);
@@ -125,7 +124,6 @@ class TestController extends Controller
             'body' => $data
         ]);
         $data=$res->getBody();
-
         return $data;
     }
 
@@ -134,16 +132,13 @@ class TestController extends Controller
         $string="我爱添雯，因为他是个傻13";//数据
         $rsa_data=openssl_get_privatekey('file://'.storage_path('soft/rsa_private.pem'));//获取私钥位置
         openssl_private_encrypt($string,$enc_data,$rsa_data);//加密
-
         //签名
-
         $client=new Client();//new guzzle
         $url='http://vm.1810lument.com/test/no_enc';//url地址
         $res = $client->request('POST',$url, [
             'body' => $enc_data
         ]);//发送数据
         $data=$res->getBody();//接收返回的结果
-
         return $data;
     }
 
@@ -208,16 +203,14 @@ class TestController extends Controller
         openssl_sign($str,$sign,$rsa_data,OPENSSL_ALGO_SHA256);
         $sign = base64_encode($sign);
         $data['sign']=$sign;
-        //var_dump($data);exit;
-//拼接url
+
+
         $a='?';
         foreach($data as $key=>$val){
-            $a.=$key.'='.urlencode($val).'&'; //urlencode 将字符串以url形式编码
+            $a.=$key.'='.urlencode($val).'&'; //用urlencode 将字符串以url形式编码
         }
         $trim2 = rtrim($a,'&');
-        //var_dump($trim2);exit;
         $url2 = $url.$trim2;
-        //var_dump($url2);exit;
         header('refresh:2;url='.$url2);
 
     }
